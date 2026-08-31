@@ -111,6 +111,9 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+// Configure to listen on port 5000
+app.Urls.Add("http://localhost:5000");
+
 // Configure the HTTP request pipeline
 app.UseExceptionHandler(errorApp =>
 {

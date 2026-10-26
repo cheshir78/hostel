@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { BedDouble, Calendar, BarChart3, Users, Newspaper, LogIn, UserPlus } from 'lucide-react';
+import { BedDouble, Calendar, BarChart3, Users, Newspaper, LogIn, UserPlus, Hotel } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
   const { user, isAuthenticated, isAdmin, isUser } = useAuth();
@@ -79,6 +79,17 @@ export const HomePage: React.FC = () => {
                 Матрица заполняемости всех номеров хостела на 7 дней вперед.
               </p>
               <Link to="/hostel/reportrestdate" className="btn-secondary">Смотреть загрузку &rarr;</Link>
+            </div>
+
+            <div className="card">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                <Hotel style={{ color: 'var(--primary)' }} />
+                <h3>Checkout on date</h3>
+              </div>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>
+                List of checkout rooms.
+              </p>
+              <Link to="/hostel/reportcheckout" className="btn-secondary">Checkout &rarr;</Link>
             </div>
           </>
         )}

@@ -19,7 +19,6 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet("api/orders")]
-    [HttpGet("hostel/orders")]
     public async Task<ActionResult<List<OrderDto>>> GetAllOrders()
     {
         var orders = await _orderService.GetAllOrdersAsync();
@@ -27,7 +26,6 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet("api/orders/date")]
-    [HttpGet("hostel/orderdate")]
     public async Task<ActionResult<List<OrderDto>>> GetOrdersByDate([FromQuery] string? date)
     {
         DateTime targetDate = DateTime.Today;
@@ -53,7 +51,6 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet("api/orders/{id}")]
-    [HttpGet("hostel/order/{id}")]
     public async Task<ActionResult<OrderDto>> GetOrderById(int id)
     {
         var order = await _orderService.GetOrderByIdAsync(id);
@@ -65,7 +62,6 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost("api/orders")]
-    [HttpPost("hostel/order")]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
     {
         if (!ModelState.IsValid)
@@ -104,7 +100,6 @@ public class OrdersController : ControllerBase
     }
 
     [HttpDelete("api/orders/{id}")]
-    [HttpPost("hostel/orders/delete")]
     public async Task<IActionResult> DeleteOrder([FromRoute] int? id, [FromQuery] int? orderId, [FromQuery] string? action)
     {
         int targetId = id ?? orderId ?? 0;

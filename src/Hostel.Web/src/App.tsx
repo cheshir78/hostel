@@ -13,6 +13,7 @@ import { OrdersPage } from './pages/OrdersPage';
 import { OrderFormPage } from './pages/OrderFormPage';
 import { OrderDatePage } from './pages/OrderDatePage';
 import { OccupancyReportPage } from './pages/OccupancyReportPage';
+import { CheckoutReportPage } from './pages/CheckoutReportPage';
 import { AdminUsersPage } from './pages/AdminUsersPage';
 import { UserRolesPage } from './pages/UserRolesPage';
 import { NewsPage } from './pages/NewsPage';
@@ -43,6 +44,7 @@ export const App: React.FC = () => {
                 <Route path="/hostel/order/:id" element={<OrderFormPage />} />
                 <Route path="/hostel/orderdate" element={<OrderDatePage />} />
                 <Route path="/hostel/reportrestdate" element={<OccupancyReportPage />} />
+                <Route path="/hostel/reportcheckout" element={<CheckoutReportPage />} />
               </Route>
 
               {/* News - USER role */}

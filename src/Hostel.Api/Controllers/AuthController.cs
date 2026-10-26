@@ -18,7 +18,6 @@ public class AuthController : ControllerBase
         _jwtService = jwtService;
     }
 
-    [HttpPost("register")]
     [HttpPost("api/auth/register")]
     public async Task<IActionResult> Register([FromBody] RegistrationRequest request)
     {
@@ -41,7 +40,6 @@ public class AuthController : ControllerBase
         return Ok("OK");
     }
 
-    [HttpPost("auth")]
     [HttpPost("api/auth/login")]
     public async Task<IActionResult> Auth([FromBody] LoginRequest request)
     {

@@ -6,14 +6,7 @@ import { Hotel, Search, ArrowLeft } from 'lucide-react';
 import MyDatePicker from '../components/MyDatePicker';
 
 export const CheckoutReportPage: React.FC = () => {
-  const getTodayFormatted = () => {
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const yyyy = today.getFullYear();
-    return `${dd}.${mm}.${yyyy}`;
-  };
-
+ 
   const [report, setReport] = useState<RoomReportResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

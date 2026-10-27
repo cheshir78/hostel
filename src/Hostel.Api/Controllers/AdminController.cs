@@ -16,7 +16,6 @@ public class AdminController : ControllerBase
         _userService = userService;
     }
 
-    [HttpGet("admin")]
     [HttpGet("api/admin/users")]
     public async Task<ActionResult<List<UserDto>>> GetUsers()
     {
@@ -24,7 +23,6 @@ public class AdminController : ControllerBase
         return Ok(users);
     }
 
-    [HttpGet("admin/gt/{userId}")]
     [HttpGet("api/admin/users/gt/{userId}")]
     public async Task<ActionResult<List<UserDto>>> GetUsersGreaterThan(long userId)
     {
@@ -33,7 +31,6 @@ public class AdminController : ControllerBase
     }
 
     [HttpDelete("api/admin/users/{userId}")]
-    [HttpPost("admin")]
     public async Task<IActionResult> DeleteUser([FromRoute] long? userId, [FromQuery] long? id, [FromQuery] string? action)
     {
         long targetId = userId ?? id ?? 0;
@@ -51,7 +48,6 @@ public class AdminController : ControllerBase
         return Ok(new { success = true });
     }
 
-    [HttpGet("admin/userrole/{userId}")]
     [HttpGet("api/admin/users/{userId}/roles")]
     public async Task<ActionResult<List<RoleDto>>> GetUserRoles(long userId)
     {
@@ -65,7 +61,6 @@ public class AdminController : ControllerBase
         return Ok(roles);
     }
 
-    [HttpGet("admin/userroleadd/{userId}")]
     [HttpGet("api/admin/roles")]
     public async Task<ActionResult<List<RoleDto>>> GetAllRoles()
     {
@@ -73,7 +68,6 @@ public class AdminController : ControllerBase
         return Ok(roles);
     }
 
-    [HttpPost("admin/userroleadd")]
     [HttpPost("api/admin/users/{userId}/roles/{roleId}")]
     public async Task<IActionResult> AddRoleToUser(long userId, long roleId)
     {
@@ -86,7 +80,6 @@ public class AdminController : ControllerBase
         return Ok(new { success = true });
     }
 
-    [HttpPost("admin/userrole")]
     [HttpDelete("api/admin/users/{userId}/roles/{roleId}")]
     public async Task<IActionResult> RemoveRoleFromUser(long userId, long roleId)
     {

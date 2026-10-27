@@ -1,4 +1,5 @@
 using Hostel.Api.Data;
+using Hostel.Api.Helpers;
 using Hostel.Api.Models.DTOs;
 using Hostel.Api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -101,5 +102,37 @@ public class RoomService : IRoomService
         _context.Rooms.Remove(room);
         await _context.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<ReportRoomResponseDto> GetCheckoutReportAsync(DateTime toDate)
+    {
+        var baseDate = toDate.Date;
+        var header = new List<string>();
+        for (int i = 0; i < 7; i++)
+        {
+            header.Add(DateHelper.FormatDate(baseDate.AddDays(i)));
+        }
+
+        var orders = await _context.Orders
+            .Where(o => o.DateTo.Date == baseDate)
+            .Join(_context.Rooms, o => o.RoomId, r => r.Id, (o, r) => new { Order = o, Room = r })
+            .Select(x => new RoomDto
+            {
+                Id = x.Room.Id,
+                Name = x.Room.Name,
+                Number = x.Room.Number,
+                Capacity = x.Room.Capacity
+            })
+            .ToListAsync();
+
+        //var rooms = await _context.Rooms.OrderBy(r => r.Id).ToListAsync();
+        var allRoomsLines = orders;
+        
+        return new ReportRoomResponseDto
+        {
+            ReportHeader = header,
+            AllRooms = orders,
+            ReportDateStr = DateHelper.FormatDate(baseDate)
+        };
     }
 }

@@ -10,4 +10,5 @@ public interface IRoomService
     Task<Room?> GetRoomEntityByIdAsync(int id);
     Task<(bool Success, string? ErrorMessage, RoomDto? Room)> SaveRoomAsync(RoomDto roomDto);
     Task<bool> DeleteRoomAsync(int id);
+    Task<ReportRoomResponseDto> GetCheckoutReportAsync(DateTime toDate);
 }

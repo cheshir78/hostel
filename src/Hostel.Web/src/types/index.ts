@@ -57,6 +57,12 @@ export interface ReportResponse {
   orderDateStr: string;
 }
 
+export interface RoomReportResponse {
+  reportHeader: string[];
+  allRooms: Room[];
+  reportDateStr: string;
+}
+
 export interface NewsItem {
   id: number;
   title: string;

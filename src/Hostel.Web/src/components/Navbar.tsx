@@ -37,6 +37,9 @@ export const Navbar: React.FC = () => {
               <Link to="/hostel/reportrestdate" className="nav-link">
                 <BarChart3 className="icon-sm" /> Загрузка на дату
               </Link>
+              <Link to="/hostel/reportcheckout" className="nav-link">
+                <Hotel className="icon-sm" /> Checkout today
+              </Link>
             </>
           )}
 
@@ -47,9 +50,12 @@ export const Navbar: React.FC = () => {
           )}
 
           {isAdmin && (
+            <>
             <Link to="/admin" className="nav-link admin-link">
               <Users className="icon-sm" /> Пользователи (Админ)
             </Link>
+
+            </>
           )}
         </nav>
 

@@ -25,3 +25,10 @@ public class CreateRoomRequest
     [Range(1, 1000)]
     public int Capacity { get; set; }
 }
+
+public class ReportRoomResponseDto
+{
+    public List<string> ReportHeader { get; set; } = new();
+    public List<RoomDto> AllRooms { get; set; } = new();
+    public string ReportDateStr { get; set; } = string.Empty;
+}

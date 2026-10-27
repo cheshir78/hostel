@@ -1,6 +1,7 @@
 using System.Globalization;
 using Hostel.Api.Data;
 using Hostel.Api.Exceptions;
+using Hostel.Api.Helpers;
 using Hostel.Api.Models.DTOs;
 using Hostel.Api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -32,11 +33,6 @@ public class OrderService : IOrderService
         return DateTime.UtcNow.Date;
     }
 
-    private static string FormatDate(DateTime date)
-    {
-        return date.ToString("dd.MM.yyyy");
-    }
-
     private static OrderDto MapToDto(Order order)
     {
         return new OrderDto
@@ -46,7 +42,7 @@ public class OrderService : IOrderService
             Age = order.Age,
             DocumentId = order.DocumentId,
             DateFrom = order.DateFrom,
-            DateFromStr = FormatDate(order.DateFrom),
+            DateFromStr = DateHelper.FormatDate(order.DateFrom),
             Night = order.Night,
             DateTo = order.DateTo,
             RoomId = order.RoomId,
@@ -245,7 +241,7 @@ public class OrderService : IOrderService
 
             if (count > room.Capacity)
             {
-                throw new OrderServiceException($"Room is full on {FormatDate(checkDate)} (capacity {room.Capacity})");
+                throw new OrderServiceException($"Room is full on {DateHelper.FormatDate(checkDate)} (capacity {room.Capacity})");
             }
         }
     }
@@ -275,7 +271,7 @@ public class OrderService : IOrderService
         var header = new List<string>();
         for (int i = 0; i < 7; i++)
         {
-            header.Add(FormatDate(baseDate.AddDays(i)));
+            header.Add(DateHelper.FormatDate(baseDate.AddDays(i)));
         }
 
         var rooms = await _context.Rooms.OrderBy(r => r.Id).ToListAsync();
@@ -309,7 +305,7 @@ public class OrderService : IOrderService
         {
             ReportHeader = header,
             AllOrders = allOrdersLines,
-            OrderDateStr = FormatDate(baseDate)
+            OrderDateStr = DateHelper.FormatDate(baseDate)
         };
     }
 }

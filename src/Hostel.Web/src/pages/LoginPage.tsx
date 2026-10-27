@@ -19,7 +19,7 @@ export const LoginPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await apiClient.post('/auth', { username, password });
+      const response = await apiClient.post('/api/auth/login', { username, password });
       login(response.data);
       navigate('/');
     } catch (err: any) {

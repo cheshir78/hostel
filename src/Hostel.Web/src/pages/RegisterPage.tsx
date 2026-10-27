@@ -24,7 +24,7 @@ export const RegisterPage: React.FC = () => {
     setLoading(true);
 
     try {
-      await apiClient.post('/register', {
+      await apiClient.post('/api/auth/register', {
         username,
         password,
         passwordConfirm

@@ -88,7 +88,7 @@ export const CheckoutReportPage: React.FC = () => {
               <tbody>
                 {report.allRooms.length === 0 ? (
                   <tr>
-                    <td colSpan={3 + report.reportHeader.length} className="text-center" style={{ padding: '2rem', color: 'var(--text-muted)' }}>
+                    <td colSpan={3} className="text-center" style={{ padding: '2rem', color: 'var(--text-muted)' }}>
                       Нет комнат в системе
                     </td>
                   </tr>

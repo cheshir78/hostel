@@ -114,7 +114,7 @@ public class RoomService : IRoomService
         }
 
         var orders = await _context.Orders
-            .Where(o => o.DateTo == baseDate)
+            .Where(o => o.DateTo.Date == baseDate)
             .Join(_context.Rooms, o => o.RoomId, r => r.Id, (o, r) => new { Order = o, Room = r })
             .Select(x => new RoomDto
             {

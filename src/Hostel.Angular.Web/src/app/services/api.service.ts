@@ -64,7 +64,7 @@ export class ApiService {
 
   // Admin
   getUsers(minId?: number): Observable<any[]> {
-    const url = minId ? `${this.apiUrl}/admin/gt/${minId}` : `${this.apiUrl}/admin`;
+    const url = minId ? `${this.apiUrl}/admin/users/gt/${minId}` : `${this.apiUrl}/admin/users`;
     return this.http.get<any[]>(url).pipe(catchError(this.handleError));
   }
 

@@ -23,7 +23,7 @@
         <td>{{ room.price | currency }}</td>
         <td>{{ room.status }}</td>
         <td>
-          <a *ngIf="(auth.currentUser$ | async) as user" [routerLink]="['rooms', room.id, 'edit']" class="link-btn">Edit</a>
+          <a *ngIf="(auth.currentUser$ | async) as user" [routerLink]="[room.id, 'edit']" class="link-btn">Edit</a>
           <button *ngIf="(auth.currentUser$ | async) as user" (click)="deleteRoom(room.id)" class="link-btn delete">Delete</button>
         </td>
       </tr>

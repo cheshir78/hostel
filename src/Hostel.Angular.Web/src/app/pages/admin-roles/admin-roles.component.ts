@@ -59,7 +59,7 @@ export class AdminRolesComponent implements OnInit {
     this.saving = true;
 
     const selectedUser = this.users.find(u => u.id === this.selectedUserId);
-    const currentRoles = selectedUser?.roles || [];
+    const currentRoles: string[] = selectedUser?.roles || [];
 
     const rolesToAdd = this.userRoles.filter(r => !currentRoles.includes(r));
     const rolesToRemove = currentRoles.filter(r => !this.userRoles.includes(r));

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
+import { UserDto } from '../../models';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -12,57 +14,70 @@ import { Observable } from 'rxjs';
   styleUrl: './admin-roles.component.css'
 })
 export class AdminRolesComponent implements OnInit {
-  users$: Observable<any[]>;
-  users: any[] = [];
+  users$: Observable<UserDto[]>;
+  users: UserDto[] = [];
   selectedUserId: number = 0;
-  userRoles: string[] = [];
-  roles = ['ROLE_USER', 'ROLE_ADMIN'];
+  selectedUser: UserDto | null = null;
+  selectedRoles: string[] = [];
+  availableRoles = ['ROLE_USER', 'ROLE_ADMIN'];
   saving = false;
+  error = '';
 
-  constructor(private api: ApiService) {
+  constructor(
+    private api: ApiService,
+    private route: ActivatedRoute
+  ) {
     this.users$ = this.api.getUsers();
   }
 
   ngOnInit() {
+    const userIdParam = this.route.snapshot.paramMap.get('id');
+    
     this.users$ = this.api.getUsers();
     this.users$.subscribe(users => {
       this.users = users;
+      if (userIdParam) {
+        this.selectedUserId = parseInt(userIdParam);
+        this.onUserSelected();
+      }
     });
   }
 
   onUserSelected() {
     if (this.selectedUserId) {
-      const selectedUser = this.users.find(u => u.id === this.selectedUserId);
-      if (selectedUser && selectedUser.roles) {
-        this.userRoles = selectedUser.roles || [];
+      this.selectedUser = this.users.find(u => u.id === this.selectedUserId) || null;
+      if (this.selectedUser) {
+        this.selectedRoles = [...this.selectedUser.roles];
       } else {
-        this.userRoles = [];
+        this.selectedRoles = [];
       }
+    } else {
+      this.selectedUser = null;
+      this.selectedRoles = [];
     }
   }
 
   toggleRole(role: string) {
-    const index = this.userRoles.indexOf(role);
+    const index = this.selectedRoles.indexOf(role);
     if (index > -1) {
-      this.userRoles.splice(index, 1);
+      this.selectedRoles.splice(index, 1);
     } else {
-      this.userRoles.push(role);
+      this.selectedRoles.push(role);
     }
   }
 
   saveRoles() {
-    if (!this.selectedUserId) {
+    if (!this.selectedUserId || !this.selectedUser) {
       alert('Please select a user');
       return;
     }
 
     this.saving = true;
+    this.error = '';
 
-    const selectedUser = this.users.find(u => u.id === this.selectedUserId);
-    const currentRoles: string[] = selectedUser?.roles || [];
-
-    const rolesToAdd = this.userRoles.filter(r => !currentRoles.includes(r));
-    const rolesToRemove = currentRoles.filter(r => !this.userRoles.includes(r));
+    const currentRoles = this.selectedUser.roles;
+    const rolesToAdd = this.selectedRoles.filter(r => !currentRoles.includes(r));
+    const rolesToRemove = currentRoles.filter(r => !this.selectedRoles.includes(r));
 
     let completed = 0;
     const total = rolesToAdd.length + rolesToRemove.length;
@@ -73,45 +88,35 @@ export class AdminRolesComponent implements OnInit {
       return;
     }
 
+    const performedActions = () => {
+      completed++;
+      if (completed === total) {
+        this.saving = false;
+        alert('Roles updated successfully');
+        this.users$ = this.api.getUsers();
+        this.users$.subscribe(users => {
+          this.users = users;
+          this.onUserSelected();
+        });
+      }
+    };
+
+    const handleError = (err: any) => {
+      this.saving = false;
+      this.error = 'Error updating roles: ' + err.message;
+    };
+
     rolesToAdd.forEach((role: string) => {
       this.api.assignRole(this.selectedUserId, role).subscribe({
-        next: () => {
-          completed++;
-          if (completed === total) {
-            this.saving = false;
-            alert('Roles updated successfully');
-            this.users$ = this.api.getUsers();
-            this.users$.subscribe(users => {
-              this.users = users;
-              this.onUserSelected();
-            });
-          }
-        },
-        error: (err) => {
-          this.saving = false;
-          alert('Error updating roles: ' + err.message);
-        }
+        next: performedActions,
+        error: handleError
       });
     });
 
     rolesToRemove.forEach((role: string) => {
       this.api.removeRole(this.selectedUserId, role).subscribe({
-        next: () => {
-          completed++;
-          if (completed === total) {
-            this.saving = false;
-            alert('Roles updated successfully');
-            this.users$ = this.api.getUsers();
-            this.users$.subscribe(users => {
-              this.users = users;
-              this.onUserSelected();
-            });
-          }
-        },
-        error: (err) => {
-          this.saving = false;
-          alert('Error updating roles: ' + err.message);
-        }
+        next: performedActions,
+        error: handleError
       });
     });
   }

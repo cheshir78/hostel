@@ -36,3 +36,8 @@ export interface UserDto {
   username: string;
   roles: string[];
 }
+
+export interface RoleDto {
+  id: number;
+  name: string;
+}

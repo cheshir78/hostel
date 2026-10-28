@@ -1,14 +1,14 @@
 <div class="container">
   <h2>User Management</h2>
   
-  <input type="text" placeholder="Filter by ID..." [(ngModel)]="filterText" class="filter-input">
+  <input type="text" placeholder="Filter by username..." [(ngModel)]="filterText" class="filter-input">
   
   <table class="data-table">
     <thead>
       <tr>
         <th>ID</th>
         <th>Username</th>
-        <th>Role</th>
+        <th>Roles</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -16,7 +16,7 @@
       <tr *ngFor="let user of (users$ | async)">
         <td>{{ user.id }}</td>
         <td>{{ user.username }}</td>
-        <td>{{ user.role }}</td>
+        <td>{{ getRolesDisplay(user.roles) }}</td>
         <td>
           <a [routerLink]="['/admin/roles', user.id]" class="link-btn">Manage Roles</a>
           <button (click)="deleteUser(user.id)" class="link-btn delete">Delete</button>

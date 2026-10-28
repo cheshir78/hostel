@@ -1,7 +1,10 @@
 <div class="container">
   <h2>{{ isEdit ? "Edit Booking" : "Create New Booking" }}</h2>
   
-  <form (ngSubmit)="save()" #orderForm="ngForm" class="form">
+  <div *ngIf="loading" class="message">Loading order details...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  
+  <form (ngSubmit)="save()" #orderForm="ngForm" class="form" *ngIf="!loading">
     <div class="form-group">
       <label for="guestName">Guest Name:</label>
       <input type="text" id="guestName" name="guestName" [(ngModel)]="order.guestName" required>
@@ -9,7 +12,8 @@
     <div class="form-group">
       <label for="roomId">Room:</label>
       <select id="roomId" name="roomId" [(ngModel)]="order.roomId" required>
-        <option *ngFor="let room of rooms$ | async" [value]="room.id">{{ room.name }}</option>
+        <option value="0">-- Select a room --</option>
+        <option *ngFor="let room of rooms$ | async" [value]="room.id">{{ room.name }} - ${{ room.price }}/night</option>
       </select>
     </div>
     <div class="form-group">
@@ -19,6 +23,10 @@
     <div class="form-group">
       <label for="checkOut">Check-out:</label>
       <input type="date" id="checkOut" name="checkOut" [(ngModel)]="order.checkOut" required>
+    </div>
+    <div *ngIf="isEdit" class="form-group">
+      <label for="totalPrice">Total Price:</label>
+      <input type="number" id="totalPrice" name="totalPrice" [(ngModel)]="order.totalPrice" disabled>
     </div>
     <div class="form-actions">
       <button type="submit" class="btn btn-primary">Save</button>

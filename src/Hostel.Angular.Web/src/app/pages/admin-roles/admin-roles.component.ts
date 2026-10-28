@@ -13,9 +13,11 @@ import { Observable } from 'rxjs';
 })
 export class AdminRolesComponent implements OnInit {
   users$: Observable<any[]>;
+  users: any[] = [];
   selectedUserId: number = 0;
   userRoles: string[] = [];
   roles = ['ROLE_USER', 'ROLE_ADMIN'];
+  saving = false;
 
   constructor(private api: ApiService) {
     this.users$ = this.api.getUsers();
@@ -23,6 +25,20 @@ export class AdminRolesComponent implements OnInit {
 
   ngOnInit() {
     this.users$ = this.api.getUsers();
+    this.users$.subscribe(users => {
+      this.users = users;
+    });
+  }
+
+  onUserSelected() {
+    if (this.selectedUserId) {
+      const selectedUser = this.users.find(u => u.id === this.selectedUserId);
+      if (selectedUser && selectedUser.roles) {
+        this.userRoles = selectedUser.roles || [];
+      } else {
+        this.userRoles = [];
+      }
+    }
   }
 
   toggleRole(role: string) {
@@ -35,8 +51,68 @@ export class AdminRolesComponent implements OnInit {
   }
 
   saveRoles() {
-    if (this.selectedUserId) {
-      this.api.assignRole(this.selectedUserId, this.userRoles[0]).subscribe();
+    if (!this.selectedUserId) {
+      alert('Please select a user');
+      return;
     }
+
+    this.saving = true;
+
+    const selectedUser = this.users.find(u => u.id === this.selectedUserId);
+    const currentRoles = selectedUser?.roles || [];
+
+    const rolesToAdd = this.userRoles.filter(r => !currentRoles.includes(r));
+    const rolesToRemove = currentRoles.filter(r => !this.userRoles.includes(r));
+
+    let completed = 0;
+    const total = rolesToAdd.length + rolesToRemove.length;
+
+    if (total === 0) {
+      this.saving = false;
+      alert('No changes made');
+      return;
+    }
+
+    rolesToAdd.forEach(role => {
+      this.api.assignRole(this.selectedUserId, role).subscribe({
+        next: () => {
+          completed++;
+          if (completed === total) {
+            this.saving = false;
+            alert('Roles updated successfully');
+            this.users$ = this.api.getUsers();
+            this.users$.subscribe(users => {
+              this.users = users;
+              this.onUserSelected();
+            });
+          }
+        },
+        error: (err) => {
+          this.saving = false;
+          alert('Error updating roles: ' + err.message);
+        }
+      });
+    });
+
+    rolesToRemove.forEach(role => {
+      this.api.removeRole(this.selectedUserId, role).subscribe({
+        next: () => {
+          completed++;
+          if (completed === total) {
+            this.saving = false;
+            alert('Roles updated successfully');
+            this.users$ = this.api.getUsers();
+            this.users$.subscribe(users => {
+              this.users = users;
+              this.onUserSelected();
+            });
+          }
+        },
+        error: (err) => {
+          this.saving = false;
+          alert('Error updating roles: ' + err.message);
+        }
+      });
+    });
   }
 }

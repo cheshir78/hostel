@@ -1,0 +1,28 @@
+<div class="container">
+  <h2>{{ isEdit ? "Edit Booking" : "Create New Booking" }}</h2>
+  
+  <form (ngSubmit)="save()" #orderForm="ngForm" class="form">
+    <div class="form-group">
+      <label for="guestName">Guest Name:</label>
+      <input type="text" id="guestName" name="guestName" [(ngModel)]="order.guestName" required>
+    </div>
+    <div class="form-group">
+      <label for="roomId">Room:</label>
+      <select id="roomId" name="roomId" [(ngModel)]="order.roomId" required>
+        <option *ngFor="let room of rooms$ | async" [value]="room.id">{{ room.name }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="checkIn">Check-in:</label>
+      <input type="date" id="checkIn" name="checkIn" [(ngModel)]="order.checkIn" required>
+    </div>
+    <div class="form-group">
+      <label for="checkOut">Check-out:</label>
+      <input type="date" id="checkOut" name="checkOut" [(ngModel)]="order.checkOut" required>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <a routerLink="/orders" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>

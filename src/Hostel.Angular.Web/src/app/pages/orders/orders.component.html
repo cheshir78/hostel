@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="page-header">
+    <h2>Bookings</h2>
+    <a [routerLink]="['/orders/new']" class="btn btn-primary">New Booking</a>
+  </div>
+  
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Guest Name</th>
+        <th>Room</th>
+        <th>Check-in</th>
+        <th>Check-out</th>
+        <th>Total Price</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders$ | async">
+        <td>{{ order.id }}</td>
+        <td>{{ order.guestName }}</td>
+        <td>{{ order.roomName }}</td>
+        <td>{{ order.checkIn | date: 'short' }}</td>
+        <td>{{ order.checkOut | date: 'short' }}</td>
+        <td>{{ order.totalPrice | currency }}</td>
+        <td>
+          <a [routerLink]="['/orders', order.id, 'edit']" class="link-btn">Edit</a>
+          <button (click)="deleteOrder(order.id)" class="link-btn delete">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

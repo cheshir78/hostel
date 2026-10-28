@@ -73,7 +73,7 @@ export class AdminRolesComponent implements OnInit {
       return;
     }
 
-    rolesToAdd.forEach(role => {
+    rolesToAdd.forEach((role: string) => {
       this.api.assignRole(this.selectedUserId, role).subscribe({
         next: () => {
           completed++;
@@ -94,7 +94,7 @@ export class AdminRolesComponent implements OnInit {
       });
     });
 
-    rolesToRemove.forEach(role => {
+    rolesToRemove.forEach((role: string) => {
       this.api.removeRole(this.selectedUserId, role).subscribe({
         next: () => {
           completed++;

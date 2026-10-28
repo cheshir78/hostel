@@ -11,19 +11,19 @@
         <th>Guest Name</th>
         <th>Room</th>
         <th>Check-in</th>
+        <th>Nights</th>
         <th>Check-out</th>
-        <th>Total Price</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let order of orders$ | async">
         <td>{{ order.id }}</td>
-        <td>{{ order.guestName }}</td>
-        <td>{{ order.roomName }}</td>
-        <td>{{ order.checkIn | date: 'short' }}</td>
-        <td>{{ order.checkOut | date: 'short' }}</td>
-        <td>{{ order.totalPrice | currency }}</td>
+        <td>{{ order.name }}</td>
+        <td>{{ order.roomName || '-' }}</td>
+        <td>{{ order.dateFrom | date: 'short' }}</td>
+        <td>{{ order.night }}</td>
+        <td>{{ order.dateTo | date: 'short' }}</td>
         <td>
           <a [routerLink]="['/orders', order.id, 'edit']" class="link-btn">Edit</a>
           <button (click)="deleteOrder(order.id)" class="link-btn delete">Delete</button>

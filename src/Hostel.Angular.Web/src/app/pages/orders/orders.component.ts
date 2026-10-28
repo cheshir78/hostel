@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
+import { Order } from '../../models';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -13,7 +14,7 @@ import { Observable } from 'rxjs';
   styleUrl: './orders.component.css'
 })
 export class OrdersComponent implements OnInit {
-  orders$: Observable<any[]>;
+  orders$: Observable<Order[]>;
 
   constructor(public auth: AuthService, private api: ApiService) {
     this.orders$ = this.api.getOrders();

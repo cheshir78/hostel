@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
+import { Order, Room } from '../../models';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -13,8 +14,15 @@ import { Observable } from 'rxjs';
   styleUrl: './order-form.component.css'
 })
 export class OrderFormComponent implements OnInit {
-  order = { id: 0, guestName: '', roomId: 0, checkIn: '', checkOut: '', totalPrice: 0 };
-  rooms$: Observable<any[]>;
+  order: Order = { 
+    id: 0, 
+    name: '', 
+    dateFrom: new Date().toISOString().split('T')[0], 
+    night: 1, 
+    dateTo: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+    roomId: 0 
+  };
+  rooms$: Observable<Room[]>;
   isEdit = false;
   loading = false;
   error = '';
@@ -45,8 +53,19 @@ export class OrderFormComponent implements OnInit {
     }
   }
 
+  onDateFromChange() {
+    const dateFrom = new Date(this.order.dateFrom);
+    const dateTo = new Date(dateFrom);
+    dateTo.setDate(dateTo.getDate() + this.order.night);
+    this.order.dateTo = dateTo.toISOString().split('T')[0];
+  }
+
+  onNightChange() {
+    this.onDateFromChange();
+  }
+
   save() {
-    if (!this.order.guestName || !this.order.roomId || !this.order.checkIn || !this.order.checkOut) {
+    if (!this.order.name || !this.order.roomId || !this.order.dateFrom || this.order.night <= 0) {
       alert('Please fill in all required fields');
       return;
     }

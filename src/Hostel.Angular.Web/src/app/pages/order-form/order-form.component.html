@@ -6,27 +6,35 @@
   
   <form (ngSubmit)="save()" #orderForm="ngForm" class="form" *ngIf="!loading">
     <div class="form-group">
-      <label for="guestName">Guest Name:</label>
-      <input type="text" id="guestName" name="guestName" [(ngModel)]="order.guestName" required>
+      <label for="name">Guest Name:</label>
+      <input type="text" id="name" name="name" [(ngModel)]="order.name" required placeholder="Full name">
+    </div>
+    <div class="form-group">
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" [(ngModel)]="order.age" min="18" placeholder="Optional">
+    </div>
+    <div class="form-group">
+      <label for="documentId">Document ID:</label>
+      <input type="text" id="documentId" name="documentId" [(ngModel)]="order.documentId" placeholder="Passport or ID number (optional)">
     </div>
     <div class="form-group">
       <label for="roomId">Room:</label>
       <select id="roomId" name="roomId" [(ngModel)]="order.roomId" required>
-        <option value="0">-- Select a room --</option>
-        <option *ngFor="let room of rooms$ | async" [value]="room.id">{{ room.name }} - ${{ room.price }}/night</option>
+        <option [value]="0">-- Select a room --</option>
+        <option *ngFor="let room of rooms$ | async" [value]="room.id">{{ room.name }} ({{ room.capacity }} persons)</option>
       </select>
     </div>
     <div class="form-group">
-      <label for="checkIn">Check-in:</label>
-      <input type="date" id="checkIn" name="checkIn" [(ngModel)]="order.checkIn" required>
+      <label for="dateFrom">Check-in Date:</label>
+      <input type="date" id="dateFrom" name="dateFrom" [(ngModel)]="order.dateFrom" (change)="onDateFromChange()" required>
     </div>
     <div class="form-group">
-      <label for="checkOut">Check-out:</label>
-      <input type="date" id="checkOut" name="checkOut" [(ngModel)]="order.checkOut" required>
+      <label for="night">Number of Nights:</label>
+      <input type="number" id="night" name="night" [(ngModel)]="order.night" (change)="onNightChange()" required min="1" max="365">
     </div>
-    <div *ngIf="isEdit" class="form-group">
-      <label for="totalPrice">Total Price:</label>
-      <input type="number" id="totalPrice" name="totalPrice" [(ngModel)]="order.totalPrice" disabled>
+    <div class="form-group">
+      <label for="dateTo">Check-out Date:</label>
+      <input type="date" id="dateTo" name="dateTo" [(ngModel)]="order.dateTo" disabled>
     </div>
     <div class="form-actions">
       <button type="submit" class="btn btn-primary">Save</button>

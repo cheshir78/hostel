@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
+import { Room } from '../../models';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -13,7 +14,7 @@ import { Observable } from 'rxjs';
   styleUrl: './rooms.component.css'
 })
 export class RoomsComponent implements OnInit {
-  rooms$: Observable<any[]>;
+  rooms$: Observable<Room[]>;
 
   constructor(public auth: AuthService, private api: ApiService) {
     this.rooms$ = this.api.getRooms();

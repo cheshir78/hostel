@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
+import { Room } from '../../models';
 
 @Component({
   selector: 'app-room-form',
@@ -12,7 +13,7 @@ import { ApiService } from '../../services/api.service';
   styleUrl: './room-form.component.css'
 })
 export class RoomFormComponent implements OnInit {
-  room = { id: 0, number: '', name: '', capacity: 0, beds: 1, price: 0, status: 'AVAILABLE' };
+  room: Room = { id: 0, name: '', number: undefined, capacity: 1 };
   isEdit = false;
   loading = false;
   error = '';
@@ -42,7 +43,7 @@ export class RoomFormComponent implements OnInit {
   }
 
   save() {
-    if (!this.room.number || !this.room.name || this.room.capacity <= 0 || this.room.price <= 0) {
+    if (!this.room.name || this.room.capacity <= 0) {
       alert('Please fill in all required fields');
       return;
     }

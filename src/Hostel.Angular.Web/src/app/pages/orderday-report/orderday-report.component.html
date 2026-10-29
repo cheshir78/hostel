@@ -1,0 +1,37 @@
+<div class="container">
+  <h2>Order By Date Report</h2>
+
+  <label for="report-date">Date:</label>
+  <input
+    id="report-date"
+    type="date"
+    [value]="selectedDate"
+    (change)="onDateChange($any($event.target).value)" />
+  
+  <table class="orderday-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Guest</th>
+        <th>Age</th>
+        <th>Document</th>
+        <th>Checkin</th>
+        <th>Nights</th>
+        <th>Checkout</th>
+        <th>Room</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of (occupancy$ | async)?.allOrders">
+        <td>{{ order.id }}</td>
+        <td>{{ order.name }}</td>
+        <td>{{ order.age }}</td>
+        <td>{{ order.documentId }}</td>
+        <td>{{ order.dateFromStr }}</td>
+        <td>{{ order.night }}</td>
+        <td>{{ order.dateTo }}</td>
+        <td>{{ order.roomName }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

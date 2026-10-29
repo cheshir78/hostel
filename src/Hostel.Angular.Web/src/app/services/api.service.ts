@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Room, Order, UserDto, Role } from '../models';
+import { Room, Order, UserDto, Role, OrderDayReport, RoleDto } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -54,13 +54,17 @@ export class ApiService {
     return this.http.delete(`${this.apiUrl}/orders/${id}`).pipe(catchError(this.handleError));
   }
 
+  getNews(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/news`).pipe(catchError(this.handleError));
+  }
+
   // Reports
   getOccupancyReport(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/reports/occupancy`).pipe(catchError(this.handleError));
   }
 
   getOrdersByDate(date: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/orders/date?date=${date}`).pipe(catchError(this.handleError));
+    return this.http.get<OrderDayReport>(`${this.apiUrl}/orders/date?date=${date}`).pipe(catchError(this.handleError));
   }
 
   // Admin - Users
@@ -73,20 +77,20 @@ export class ApiService {
   }
 
   // Admin - Roles
-  getUserRoles(userId: number): Observable<Role[]> {
+  getUserRoles(userId: number): Observable<RoleDto[]> {
     return this.http.get<Role[]>(`${this.apiUrl}/admin/users/${userId}/roles`).pipe(catchError(this.handleError));
   }
 
-  getAllRoles(): Observable<Role[]> {
+  getAllRoles(): Observable<RoleDto[]> {
     return this.http.get<Role[]>(`${this.apiUrl}/admin/roles`).pipe(catchError(this.handleError));
   }
 
   assignRole(userId: number, role: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/admin/assign-role`, { userId, role }).pipe(catchError(this.handleError));
+    return this.http.post(`${this.apiUrl}/admin/users/${userId}/roles/${role}`, {}).pipe(catchError(this.handleError));
   }
 
   removeRole(userId: number, role: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/admin/remove-role`, { userId, role }).pipe(catchError(this.handleError));
+    return this.http.post(`${this.apiUrl}/admin/users/${userId}/roles/${role}`, { userId, role }).pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse) {

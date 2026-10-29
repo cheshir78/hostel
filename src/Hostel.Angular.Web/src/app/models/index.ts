@@ -41,3 +41,8 @@ export interface RoleDto {
   id: number;
   name: string;
 }
+
+export interface OrderDayReport {
+  allOrders: Order[];
+  orderDateStr: string;
+}

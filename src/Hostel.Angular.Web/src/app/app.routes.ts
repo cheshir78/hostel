@@ -10,6 +10,7 @@ import { RoomFormComponent } from './pages/room-form/room-form.component';
 import { OrdersComponent } from './pages/orders/orders.component';
 import { OrderFormComponent } from './pages/order-form/order-form.component';
 import { OccupancyReportComponent } from './pages/occupancy-report/occupancy-report.component';
+import { OrderDayReportComponent } from './pages/orderday-report/orderday-report.component';
 import { AdminUsersComponent } from './pages/admin-users/admin-users.component';
 import { AdminRolesComponent } from './pages/admin-roles/admin-roles.component';
 import { NewsComponent } from './pages/news/news.component';
@@ -68,6 +69,12 @@ export const routes: Routes = [
     data: { roles: ['ROLE_USER'] }
   },
   {
+    path: 'orderdayreport',
+    component: OrderDayReportComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ROLE_USER'] }
+  },
+  {
     path: 'admin/users',
     component: AdminUsersComponent,
     canActivate: [AuthGuard],
@@ -75,6 +82,12 @@ export const routes: Routes = [
   },
   {
     path: 'admin/roles',
+    component: AdminRolesComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ROLE_ADMIN'] }
+  },
+  {
+    path: 'admin/roles/:id',
     component: AdminRolesComponent,
     canActivate: [AuthGuard],
     data: { roles: ['ROLE_ADMIN'] }

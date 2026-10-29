@@ -14,13 +14,16 @@ export class NewsComponent implements OnInit {
   news$: Observable<any[]>;
 
   constructor(private api: ApiService) {
-    this.news$ = of([
+    this.news$ = this.api.getNews();
+    /*this.news$ = of([
       { id: 1, title: 'Welcome to Hostel', date: new Date(), content: 'Welcome to our hostel management system!' },
       { id: 2, title: 'New Features', date: new Date(), content: 'Check out our new booking features.' }
-    ]);
+    ]);*/
   }
 
   ngOnInit() {
     // Load news from API
+    this.news$ = this.api.getNews();
+
   }
 }

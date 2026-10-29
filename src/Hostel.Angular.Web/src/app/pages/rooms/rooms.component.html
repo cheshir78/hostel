@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="page-header">
+    <h2>Rooms</h2>
+    <a *ngIf="(auth.currentUser$ | async) as user" [routerLink]="['/rooms/new']" class="btn btn-primary">Add Room</a>
+  </div>
+  
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Number</th>
+        <th>Name</th>
+        <th>Capacity</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let room of rooms$ | async">
+        <td>{{ room.id }}</td>
+        <td>{{ room.number || '-' }}</td>
+        <td>{{ room.name }}</td>
+        <td>{{ room.capacity }} persons</td>
+        <td>
+          <a *ngIf="(auth.currentUser$ | async) as user" [routerLink]="[room.id, 'edit']" class="link-btn">Edit</a>
+          <button *ngIf="(auth.currentUser$ | async) as user" (click)="deleteRoom(room.id)" class="link-btn delete">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

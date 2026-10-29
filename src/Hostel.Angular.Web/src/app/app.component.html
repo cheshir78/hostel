@@ -1,0 +1,44 @@
+<div class="app-container">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a routerLink="/home" class="brand-link">Hostel System</a>
+    </div>
+    <ul class="nav-menu">
+      <li><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
+      <li *ngIf="(auth.currentUser$ | async)">
+        <a routerLink="/rooms" routerLinkActive="active">Rooms</a>
+      </li>
+      <li *ngIf="(auth.currentUser$ | async)">
+        <a routerLink="/orders" routerLinkActive="active">Orders</a>
+      </li>
+      <li *ngIf="(auth.currentUser$ | async)">
+        <a routerLink="/orderdayreport" routerLinkActive="active">Orders on date</a>
+      </li>
+      <li *ngIf="(auth.currentUser$ | async)">
+        <a routerLink="/report" routerLinkActive="active">Orders by 7 days</a>
+      </li>
+      <li *ngIf="(auth.currentUser$ | async)">
+        <a routerLink="/report" routerLinkActive="active">Checkout</a>
+      </li>
+      <li *ngIf="(auth.currentUser$ | async)">
+        <a routerLink="/news" routerLinkActive="active">News</a>
+      </li>
+      <li *ngIf="(auth.currentUser$ | async) as user" [ngClass]="{ 'admin-menu': user.roles.includes('ROLE_ADMIN') }">
+        <a routerLink="/admin/users" routerLinkActive="active">Admin</a>
+      </li>
+      <li *ngIf="!(auth.currentUser$ | async)">
+        <a routerLink="/login" routerLinkActive="active">Login</a>
+      </li>
+      <li *ngIf="!(auth.currentUser$ | async)">
+        <a routerLink="/register" routerLinkActive="active">Register</a>
+      </li>
+      <li *ngIf="(auth.currentUser$ | async)">
+        <button (click)="logout()" class="btn-logout">Logout</button>
+      </li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+    <router-outlet />
+  </main>
+</div>

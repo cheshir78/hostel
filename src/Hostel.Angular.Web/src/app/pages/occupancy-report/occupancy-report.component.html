@@ -1,0 +1,20 @@
+<div class="container">
+  <h2>7-Day Occupancy Report</h2>
+  
+  <table class="occupancy-table">
+    <thead>
+      <tr>
+        <th>Room</th>
+        <th *ngFor="let day of days$ | async">{{ day }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let room of occupancy$ | async">
+        <td class="room-name">{{ room.name }}</td>
+        <td *ngFor="let day of room.occupancy" [ngClass]="day > 0 ? 'occupied' : 'available'">
+          {{ (day / room.beds * 100) | number: '0.0' }}%
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

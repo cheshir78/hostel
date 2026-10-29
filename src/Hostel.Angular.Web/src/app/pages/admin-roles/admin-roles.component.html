@@ -1,0 +1,32 @@
+<div class="container">
+  <h2>Role Management</h2>
+  
+  <div *ngIf="error" class="error">{{ error }}</div>
+  
+  <div class="role-assignment">
+    <p>{{ selectedUser?.username }}</p>
+    <!--<div class="form-group">
+    <label for="user">{{ selectedUser?.username }}</label>
+    <select id="user" name="user" [(ngModel)]="selectedUserId" (change)="onUserSelected()">
+      <option [value]="0">-- Select a user --</option>
+      <option *ngFor="let user of users$ | async" [value]="user.id">{{ user.username }} ({{ user.roles.join(', ') || 'No roles' }})</option>
+    </select>
+  </div>-->
+
+    <div *ngIf="selectedUser" class="role-list">
+      <p><strong>Available Roles:</strong></p>
+      <label *ngFor="let role of availableRoles" class="checkbox">
+        <input type="checkbox"
+               [checked]="selectedRoles.includes(role)"
+               (change)="toggleRole(role)">
+        {{ role }}
+      </label>
+    </div>
+
+    <button (click)="saveRoles()"
+            class="btn btn-primary"
+            [disabled]="saving || selectedUserId === 0">
+      {{ saving ? 'Saving...' : 'Save Roles' }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<div class="container">
+  <h2>News & Announcements</h2>
+  
+  <div class="news-container">
+    <article *ngFor="let article of news$ | async" class="news-article">
+      <h3>{{ article.title }}</h3>
+      <p class="news-date">{{ article.date | date: 'medium' }}</p>
+      <p>{{ article.content }}</p>
+    </article>
+  </div>
+</div>

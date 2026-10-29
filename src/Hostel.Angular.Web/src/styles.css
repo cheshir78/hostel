@@ -102,7 +102,7 @@ h1, h2, h3 {
   color: #3498db;
   cursor: pointer;
   text-decoration: underline;
-  padding: 0;
+  padding: 0 10px 0 0px;
   font-size: 1rem;
 }
 

@@ -85,12 +85,12 @@ export class ApiService {
     return this.http.get<Role[]>(`${this.apiUrl}/admin/roles`).pipe(catchError(this.handleError));
   }
 
-  assignRole(userId: number, role: string): Observable<any> {
+  assignRole(userId: number, role: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/admin/users/${userId}/roles/${role}`, {}).pipe(catchError(this.handleError));
   }
 
-  removeRole(userId: number, role: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/admin/users/${userId}/roles/${role}`, { userId, role }).pipe(catchError(this.handleError));
+  removeRole(userId: number, role: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/admin/users/${userId}/roles/${role}`).pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse) {

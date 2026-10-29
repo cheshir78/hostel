@@ -19,9 +19,7 @@ export class AdminRolesComponent implements OnInit {
   selectedUserId: number = 0;
   selectedUser: UserDto | null = null;
   selectedRoles: string[] = [];
-  //availableRoles = ['ROLE_USER', 'ROLE_ADMIN'];
   availableRoles$!: Observable<RoleDto[]>;
-  //availableRoles: RoleDto[] = [];
   saving = false;
   error = '';
 
@@ -110,7 +108,13 @@ export class AdminRolesComponent implements OnInit {
       this.error = 'Error updating roles: ' + err.message;
     };
 
-    const availableRoles = await firstValueFrom(this.availableRoles$);
+    let availableRoles: RoleDto[];
+    try {
+      availableRoles = await firstValueFrom(this.availableRoles$);
+    } catch (err) {
+      handleError(err);
+      return;
+    }
 
     const requestsAdd = rolesToAdd.map((role: string) => {
       const roleId = availableRoles.find(r => r.name === role)?.id || 0;

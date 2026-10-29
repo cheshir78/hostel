@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
-import { UserDto } from '../../models';
-import { Observable } from 'rxjs';
+import { UserDto, RoleDto } from '../../models';
+import { Observable, forkJoin, firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-admin-roles',
@@ -19,7 +19,9 @@ export class AdminRolesComponent implements OnInit {
   selectedUserId: number = 0;
   selectedUser: UserDto | null = null;
   selectedRoles: string[] = [];
-  availableRoles = ['ROLE_USER', 'ROLE_ADMIN'];
+  //availableRoles = ['ROLE_USER', 'ROLE_ADMIN'];
+  availableRoles$!: Observable<RoleDto[]>;
+  //availableRoles: RoleDto[] = [];
   saving = false;
   error = '';
 
@@ -28,6 +30,7 @@ export class AdminRolesComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.users$ = this.api.getUsers();
+    //this.availableRoles$ = this.api.getAllRoles();
   }
 
   ngOnInit() {
@@ -41,6 +44,7 @@ export class AdminRolesComponent implements OnInit {
         this.onUserSelected();
       }
     });
+    this.availableRoles$ = this.api.getAllRoles();
   }
 
   onUserSelected() {
@@ -66,7 +70,7 @@ export class AdminRolesComponent implements OnInit {
     }
   }
 
-  saveRoles() {
+  async saveRoles() {
     if (!this.selectedUserId || !this.selectedUser) {
       alert('Please select a user');
       return;
@@ -88,8 +92,8 @@ export class AdminRolesComponent implements OnInit {
       return;
     }
 
-    const performedActions = () => {
-      completed++;
+    const performedActions = (count: number) => {
+      completed+=count;
       if (completed === total) {
         this.saving = false;
         alert('Roles updated successfully');
@@ -106,18 +110,40 @@ export class AdminRolesComponent implements OnInit {
       this.error = 'Error updating roles: ' + err.message;
     };
 
-    rolesToAdd.forEach((role: string) => {
-      this.api.assignRole(this.selectedUserId, role).subscribe({
-        next: performedActions,
-        error: handleError
-      });
+    const availableRoles = await firstValueFrom(this.availableRoles$);
+
+    const requestsAdd = rolesToAdd.map((role: string) => {
+      const roleId = availableRoles.find(r => r.name === role)?.id || 0;
+
+      return this.api.assignRole(this.selectedUserId, roleId);
     });
 
-    rolesToRemove.forEach((role: string) => {
-      this.api.removeRole(this.selectedUserId, role).subscribe({
-        next: performedActions,
-        error: handleError
+    if (requestsAdd.length > 0) {
+      forkJoin(requestsAdd).subscribe({
+        next: (results) => {
+          performedActions(requestsAdd.length);
+        },
+        error: (err) => {
+          handleError(err);
+        }
       });
+    }
+
+    const requestsRemove = rolesToRemove.map((role: string) => {
+      const roleId = availableRoles.find(r => r.name === role)?.id || 0;
+
+      return this.api.removeRole(this.selectedUserId, roleId);
     });
+
+    if (requestsRemove.length > 0) {
+      forkJoin(requestsRemove).subscribe({
+        next: (results) => {
+          performedActions(requestsRemove.length);
+        },
+        error: (err) => {
+          handleError(err);
+        }
+      });
+    }
   }
 }

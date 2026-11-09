@@ -19,7 +19,7 @@ export class CheckoutReportComponent implements OnInit {
   constructor(private api: ApiService) {
     this.selectedDate = this.toInputDateValue(new Date());
     this.onDate$ = of(new Date());
-    this.occupancy$ = this.api.getOrdersByDate(new Date().toISOString());
+    this.occupancy$ = this.api.getCheckoutByDate(this.selectedDate);
   }
 
   ngOnInit() {
@@ -32,7 +32,9 @@ export class CheckoutReportComponent implements OnInit {
   }
 
   private loadOrdersByDate(date: string) {
-    this.occupancy$ = this.api.getCheckoutByDate(new Date(date).toISOString());
+    this.occupancy$ = date
+      ? this.api.getCheckoutByDate(date)
+      : of({ allRooms: [], orderDateStr: '' });
   }
 
   private toInputDateValue(date: Date): string {

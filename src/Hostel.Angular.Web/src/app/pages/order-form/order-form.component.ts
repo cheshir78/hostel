@@ -42,7 +42,10 @@ export class OrderFormComponent implements OnInit {
       this.loading = true;
       this.api.getOrder(parseInt(id)).subscribe({
         next: (loadedOrder) => {
-          const dateFrom = new Date(loadedOrder.dateFrom);
+          const dateFromValue = loadedOrder.dateFrom;
+          const dateFrom = typeof dateFromValue === 'string'
+            ? new Date(`${dateFromValue.split('T')[0]}T00:00:00.000Z`)
+            : new Date(Date.UTC(dateFromValue.getFullYear(), dateFromValue.getMonth(), dateFromValue.getDate()));
           this.order = {
             ...loadedOrder,
             dateFrom: this.toDateInputValue(dateFrom),
@@ -68,9 +71,9 @@ export class OrderFormComponent implements OnInit {
   onDateFromChange() {
     const dateFrom = new Date(this.order.dateFrom);
     const dateTo = new Date(dateFrom);
-    //dateTo.setDate(dateTo.getDate() + this.order.night);
+    dateTo.setUTCDate(dateTo.getUTCDate() + this.order.night);
     this.order.dateFromStr = dateFrom.toISOString().split('T')[0];
-    //this.order.dateTo = dateTo.toISOString().split('T')[0];
+    this.order.dateTo = dateTo.toISOString().split('T')[0];
   }
 
   onNightChange() {

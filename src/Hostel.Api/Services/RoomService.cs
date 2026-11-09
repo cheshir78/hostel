@@ -108,10 +108,6 @@ public class RoomService : IRoomService
     {
         var baseDate = toDate.Date;
         var header = new List<string>();
-        for (int i = 0; i < 7; i++)
-        {
-            header.Add(DateHelper.FormatDate(baseDate.AddDays(i)));
-        }
 
         var orders = await _context.Orders
             .Where(o => o.DateTo.Date == baseDate)

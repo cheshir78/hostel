@@ -50,7 +50,7 @@ public class ReportsController : ControllerBase
 
         if (!string.IsNullOrWhiteSpace(inputDateStr))
         {
-            string[] formats = { "dd.MM.yyyy", "yyyy-MM-dd" };
+            string[] formats = { "dd.MM.yyyy", "yyyy-MM-dd", "yyyy-MM-ddTHH:mm:ss", "yyyy-MM-ddTHH:mm:ssZ", "yyyy-MM-ddTHH:mm:ss.fffZ" };
             if (DateTime.TryParseExact(inputDateStr, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsed))
             {
                 startDate = parsed;

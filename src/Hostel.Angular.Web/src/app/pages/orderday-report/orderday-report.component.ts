@@ -19,7 +19,7 @@ export class OrderDayReportComponent implements OnInit {
   constructor(private api: ApiService) {
     this.selectedDate = this.toInputDateValue(new Date());
     this.onDate$ = of(new Date());
-    this.occupancy$ = this.api.getOrdersByDate(new Date().toISOString());
+    this.occupancy$ = this.api.getOrdersByDate(new Date(this.selectedDate).toISOString());
   }
 
   ngOnInit() {

@@ -18,7 +18,7 @@
         <a routerLink="/report" routerLinkActive="active">Orders by 7 days</a>
       </li>
       <li *ngIf="(auth.currentUser$ | async)">
-        <a routerLink="/report" routerLinkActive="active">Checkout</a>
+        <a routerLink="/checkout-report" routerLinkActive="active">Checkout</a>
       </li>
       <li *ngIf="(auth.currentUser$ | async)">
         <a routerLink="/news" routerLinkActive="active">News</a>

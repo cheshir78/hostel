@@ -11,6 +11,7 @@ import { OrdersComponent } from './pages/orders/orders.component';
 import { OrderFormComponent } from './pages/order-form/order-form.component';
 import { OccupancyReportComponent } from './pages/occupancy-report/occupancy-report.component';
 import { OrderDayReportComponent } from './pages/orderday-report/orderday-report.component';
+import { CheckoutReportComponent } from './pages/checkout-report/checkout-report.component';
 import { AdminUsersComponent } from './pages/admin-users/admin-users.component';
 import { AdminRolesComponent } from './pages/admin-roles/admin-roles.component';
 import { NewsComponent } from './pages/news/news.component';
@@ -71,6 +72,12 @@ export const routes: Routes = [
   {
     path: 'orderdayreport',
     component: OrderDayReportComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ROLE_USER'] }
+  },
+  {
+    path: 'checkout-report',
+    component: CheckoutReportComponent,
     canActivate: [AuthGuard],
     data: { roles: ['ROLE_USER'] }
   },

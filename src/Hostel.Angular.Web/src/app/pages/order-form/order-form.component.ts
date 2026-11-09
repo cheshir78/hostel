@@ -42,7 +42,12 @@ export class OrderFormComponent implements OnInit {
       this.loading = true;
       this.api.getOrder(parseInt(id)).subscribe({
         next: (loadedOrder) => {
-          this.order = loadedOrder;
+          const dateFrom = new Date(loadedOrder.dateFrom);
+          this.order = {
+            ...loadedOrder,
+            dateFrom: this.toDateInputValue(dateFrom),
+            dateTo: this.toDateInputValue(new Date(dateFrom.getTime() + loadedOrder.night * 86400000))
+          }
           this.loading = false;
         },
         error: (err) => {
@@ -53,11 +58,19 @@ export class OrderFormComponent implements OnInit {
     }
   }
 
+  private toDateInputValue(value: Date | string | undefined): string {
+    if (!value) return '';
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return '';
+    return d.toISOString().split('T')[0];
+  }
+
   onDateFromChange() {
     const dateFrom = new Date(this.order.dateFrom);
     const dateTo = new Date(dateFrom);
-    dateTo.setDate(dateTo.getDate() + this.order.night);
-    this.order.dateTo = dateTo.toISOString().split('T')[0];
+    //dateTo.setDate(dateTo.getDate() + this.order.night);
+    this.order.dateFromStr = dateFrom.toISOString().split('T')[0];
+    //this.order.dateTo = dateTo.toISOString().split('T')[0];
   }
 
   onNightChange() {

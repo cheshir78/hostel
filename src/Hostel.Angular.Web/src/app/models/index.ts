@@ -46,3 +46,8 @@ export interface OrderDayReport {
   allOrders: Order[];
   orderDateStr: string;
 }
+
+export interface OrderRoomReport {
+  allRooms: Room[];
+  orderDateStr: string;
+}

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Room, Order, UserDto, Role, OrderDayReport, RoleDto } from '../models';
+import { Room, Order, UserDto, Role, OrderDayReport, OrderRoomReport, RoleDto } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -65,6 +65,10 @@ export class ApiService {
 
   getOrdersByDate(date: string): Observable<any> {
     return this.http.get<OrderDayReport>(`${this.apiUrl}/orders/date?date=${date}`).pipe(catchError(this.handleError));
+  }
+
+  getCheckoutByDate(date: string): Observable<any> {
+    return this.http.get<OrderRoomReport>(`${this.apiUrl}/reports/checkout?orderDateStr=${date}`).pipe(catchError(this.handleError));
   }
 
   // Admin - Users
